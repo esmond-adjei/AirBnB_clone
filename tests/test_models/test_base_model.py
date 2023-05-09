@@ -2,3 +2,4 @@
 """ Tests for the base class model """
 
 import datetime
+import unittest
