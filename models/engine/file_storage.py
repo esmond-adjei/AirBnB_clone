@@ -7,7 +7,7 @@ from models.base_model import BaseModel
 class FileStorage:
     """Serializes instances to a JSON file
        and deserializes JSON file to instances."""
- 
+
     __file_path = 'file_object.json'
     __objects = {}
 
@@ -39,7 +39,7 @@ class FileStorage:
                 json_obj = json.load(self.__objects, f)
 
             # converting from dictionary objects to class objects.
-            # this is done by selecting the class type 
+            # this is done by selecting the class type
             # from all_classes dictionary
             for obj_id, obj_dict in json_obj.items():
                 class_type = obj_dict["__class__"]
