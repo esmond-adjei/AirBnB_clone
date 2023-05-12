@@ -22,7 +22,7 @@ class BaseModel:
 		self.updated_at = datetime.now()
 
 	def to_dict(self):
-		cls_dict = {__class__ : self.__class__.__name__}
+		cls_dict = {'__class__' : self.__class__.__name__}
 		cls_dict.update({k: v.isoformat() \
 			     if isinstance(v, datetime) \
 			     else v for k, v in self.__dict__.items()})
