@@ -6,11 +6,12 @@ Implementation of the parent class (BasedModel).
 
 import uuid
 from datetime import datetime
-# import models
+from models import storage
 
 
 class BaseModel:
     """Parent/base class. All other classes inherits from here."""
+
     def __init__(self, *args, **kwargs):
         if kwargs:
             del kwargs['__class__']

@@ -20,6 +20,9 @@ class HBNBCommand(cmd.Cmd):
         """Overlook empty lines"""
         return False
 
+    def do_create(self):
+        
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()

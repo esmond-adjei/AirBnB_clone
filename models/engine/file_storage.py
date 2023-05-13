@@ -2,7 +2,10 @@
 """Definition of file storage class"""
 
 
-from ..base_model import BaseModel
+from models.base_model import BaseModel
+import json
+
+all_classes = {"BaseModel": BaseModel}
 
 
 class FileStorage:
@@ -11,8 +14,6 @@ class FileStorage:
 
     __file_path = 'file_object.json'
     __objects = {}
-
-    all_classes = {"BaseModel": BaseModel}
 
     def all(self):
         """returns the dictionary `__objects`"""
@@ -25,18 +26,18 @@ class FileStorage:
             self.__objects[obj_id] = obj
 
     def save(self):
-        f"""serializes objects to JSON file (path: {__file_path})"""
+        f"""serializes objects to JSON file (path: {self.__file_path})"""
         json_objs = {}
         # convert object to dictionary before saving to file
         for obj_id, obj in self.__objects.items():
             json_objs[obj_id] = obj.to_dict()
-        with open(__file_path, 'w') as f:
+        with open(self.__file_path, 'w') as f:
             json.dump(json_objs, f)
 
     def reload(self):
         try:
-            f"""deserializes the JSON file (path: {__file_path})"""
-            with open(__file_path, 'r') as f:
+            f"""deserializes the JSON file (path: {self.__file_path})"""
+            with open(self.__file_path, 'r') as f:
                 json_obj = json.load(self.__objects, f)
 
             # converting from dictionary objects to class objects.
