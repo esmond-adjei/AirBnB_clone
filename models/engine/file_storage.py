@@ -1,7 +1,8 @@
+#!/usr/bin/python3
 """Definition of file storage class"""
 
 
-from models.base_model import BaseModel
+from ..base_model import BaseModel
 
 
 class FileStorage:
