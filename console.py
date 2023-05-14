@@ -50,9 +50,11 @@ class HBNBCommand(cmd.Cmd):
         on the class name and id.
         """
         args = self.__valid_command(line)
+        if not args:
+            return False
         if not args[1]:  # missing
             print("** instance id missing **")
-            return
+            return False
         obj_id = args[0] + "." + args[1]
         obj = models.storage.all().get(obj_id, 0)
         if not obj:  # doesn't exist
@@ -65,6 +67,8 @@ class HBNBCommand(cmd.Cmd):
         Deletes an instance based on the class name and id.
         """
         args = self.__valid_command(line)
+        if not args:
+            return False
         if not args[1]:  # missing
             print("** instance id missing **")
             return False
@@ -76,7 +80,7 @@ class HBNBCommand(cmd.Cmd):
             models.storage.delete(obj_id)
             models.storage.save()
 
-    def all(self, line=None):
+    def do_all(self, line=None):
         """
         Prints all string reprensentaton of all instances based
         or not on the class name
