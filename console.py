@@ -3,7 +3,7 @@
 
 
 import cmd
-from models import storage
+import models
 from models.base_model import BaseModel
 
 all_models = {"BaseModel": BaseModel}
@@ -40,7 +40,8 @@ class HBNBCommand(cmd.Cmd):
         args = self.__valid_command(line)
         if args:
             new_model = all_models[args[0]]()
-            storage.new(new_model)
+            models.storage.new(new_model)
+            models.storage.save()
             print(new_model.id)  # xxx
 
     def do_show(self, line):
@@ -53,7 +54,7 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return
         obj_id = args[0] + "." + args[1]
-        obj = storage.all().get(obj_id, 0)
+        obj = models.storage.all().get(obj_id, 0)
         if not obj:  # doesn't exist
             print("** no instance found **")
         else:
@@ -68,12 +69,12 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return False
         obj_id = args[0] + "." + args[1]
-        obj = storage.all().get(obj_id, 0)
+        obj = models.storage.all().get(obj_id, 0)
         if not obj:  # doesn't exist
             print("** no instance found **")
         else:
-            del storage.all().pop(obj_id)
-            storage.save()
+            models.storage.delete(obj_id)
+            models.storage.save()
 
     def all(self, line=None):
         """
@@ -85,9 +86,9 @@ class HBNBCommand(cmd.Cmd):
             if args[0] not in all_models.keys():
                 print("** class doesn't exist **")
             else:
-                print(storage.all(args[0]))
+                print(models.storage.all(args[0]))
         else:
-            print(storage.all())
+            print(models.storage.all())
 
 
 if __name__ == "__main__":
