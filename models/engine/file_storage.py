@@ -1,11 +1,7 @@
 #!/usr/bin/python3
 """Definition of file storage class"""
 
-
 import json
-#from models.base_model import BaseModel
-
-#all_classes = {"BaseModel": BaseModel}
 
 
 class FileStorage:
@@ -24,7 +20,9 @@ class FileStorage:
     def all(self, model_type=None):
         """returns the dictionary `__objects`"""
         if model_type:
-            return dict(filter(lambda obj_id: obj_id[1].__class__ == model_type, self.__objects.items()))
+            return dict(filter(lambda obj_id:
+                               obj_id[1].__class__ == model_type,
+                               self.__objects.items()))
         return self.__objects
 
     def delete(self, model_id):
