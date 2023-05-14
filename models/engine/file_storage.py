@@ -2,8 +2,8 @@
 """Definition of file storage class"""
 
 
-from models.base_model import BaseModel
 import json
+from models.base_model import BaseModel
 
 all_classes = {"BaseModel": BaseModel}
 
@@ -15,15 +15,17 @@ class FileStorage:
     __file_path = 'file_object.json'
     __objects = {}
 
-    def all(self):
-        """returns the dictionary `__objects`"""
-        return self.__objects
-
     def new(self, obj):
         """sets in objects the object with key `<obj name>.id`"""
         if obj is not None:
             obj_id = obj.__class__.__name__ + "." + obj.id
             self.__objects[obj_id] = obj
+
+    def all(self, model_type=None):
+        """returns the dictionary `__objects`"""
+        if model_type:
+            return dict(filter(lambda obj_id: obj_id[1].__class__ == model_type, self.__objects.items()))
+        return self.__objects
 
     def save(self):
         f"""serializes objects to JSON file (path: {self.__file_path})"""
