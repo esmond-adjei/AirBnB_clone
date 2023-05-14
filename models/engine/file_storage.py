@@ -50,7 +50,7 @@ class FileStorage:
 
         try:
             with open(self.__file_path, 'r') as f:
-                json_obj = json.load(self.__objects, f)
+                json_obj = json.load(f)
 
             # converting from dictionary objects to class objects.
             # this is done by selecting the class type
@@ -59,4 +59,4 @@ class FileStorage:
                 class_type = obj_dict["__class__"]
                 self.__objects[obj_id] = all_classes[class_type](**obj_dict)
         except Exception as err:
-            print("Error occured while opening file", err)
+            print(f"Error occurred while opening file: {err}")
