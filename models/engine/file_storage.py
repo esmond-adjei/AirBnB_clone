@@ -3,9 +3,9 @@
 
 
 import json
-from models.base_model import BaseModel
+#from models.base_model import BaseModel
 
-all_classes = {"BaseModel": BaseModel}
+#all_classes = {"BaseModel": BaseModel}
 
 
 class FileStorage:
@@ -44,6 +44,9 @@ class FileStorage:
             json.dump(json_objs, f)
 
     def reload(self):
+        from models.base_model import BaseModel
+        all_classes = {"BaseModel": BaseModel}
+
         try:
             f"""deserializes the JSON file (path: {self.__file_path})"""
             with open(self.__file_path, 'r') as f:
