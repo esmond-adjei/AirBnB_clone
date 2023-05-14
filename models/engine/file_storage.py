@@ -27,6 +27,13 @@ class FileStorage:
             return dict(filter(lambda obj_id: obj_id[1].__class__ == model_type, self.__objects.items()))
         return self.__objects
 
+    def delete(self, model_id):
+        """deletes a model from data `__objects`"""
+        if self.__objects.get(model_id, 0):
+            del self.__objects[model_id]
+        else:
+            print("Model not found")  # xxx
+
     def save(self):
         f"""serializes objects to JSON file (path: {self.__file_path})"""
         json_objs = {}
