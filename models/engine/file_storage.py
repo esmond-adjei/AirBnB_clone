@@ -23,7 +23,7 @@ class FileStorage:
             model_cat = list(filter(lambda obj:
                                str(obj.__class__.__name__) == model_type,
                                self.__objects.values()))
-            self.__objects = [str(m) for m in model_cat]
+            return [str(m) for m in model_cat]
         return self.__objects
 
     def delete(self, model_id):
