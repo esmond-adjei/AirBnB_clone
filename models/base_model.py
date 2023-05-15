@@ -32,7 +32,7 @@ class BaseModel:
 
     def save(self):
         self.updated_at = datetime.now()
-        models.storage.save(self)
+        models.storage.save()
 
     def to_dict(self):
         cls_dict = {'__class__': self.__class__.__name__}
