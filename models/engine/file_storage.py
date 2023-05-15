@@ -32,7 +32,7 @@ class FileStorage:
         if self.__objects.get(model_id, 0):
             del self.__objects[model_id]
         else:
-            print("Model not found")  # xx
+            print("Model not found")  # xxx
 
     def save(self):
         """serializes objects to JSON file (path: {self.__file_path})"""
@@ -40,7 +40,7 @@ class FileStorage:
         # convert object to dictionary before saving to file
         for obj_id, obj in self.__objects.items():
             json_objs[obj_id] = obj.to_dict()
-        with open(self.__file_path, 'w', encoding='utf-8') as _f:
+        with open(self.__file_path, 'w') as _f:
             json.dump(json_objs, _f)
 
     def reload(self):
@@ -48,7 +48,7 @@ class FileStorage:
         all_classes = {"BaseModel": BaseModel}
 
         try:
-            with open(self.__file_path, 'r', encoding='utf-8') as _f:
+            with open(self.__file_path, 'r') as _f:
                 json_obj = json.load(_f)
 
             # converting from dictionary objects to class objects.
