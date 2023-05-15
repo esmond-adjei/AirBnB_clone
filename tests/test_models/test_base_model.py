@@ -30,7 +30,7 @@ class TestBaseModel(unittest.TestCase):
                 self.assertIn(attr, model.__dict__)
                 self.assertIs(type(model.__dict__[attr]), typ)
         self.assertEqual(model.name, "example")
-        self.assertEqual(model.number, 88)
+        self.assertEqual(model.age, 88)
 
 
 if __name__ == '__main__':
