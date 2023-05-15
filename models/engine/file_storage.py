@@ -20,9 +20,10 @@ class FileStorage:
     def all(self, model_type=None):
         """returns the dictionary `__objects`"""
         if model_type:
-            return dict(filter(lambda obj_id:
-                               obj_id[1].__class__ == model_type,
-                               self.__objects.items()))
+            model_cat = list(filter(lambda obj:
+                               str(obj.__class__.__name__) == model_type,
+                               self.__objects.values()))
+            self.__objects = [str(m) for m in model_cat]
         return self.__objects
 
     def delete(self, model_id):

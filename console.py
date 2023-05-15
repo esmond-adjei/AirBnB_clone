@@ -52,7 +52,7 @@ class HBNBCommand(cmd.Cmd):
         args = self.__valid_command(line)
         if not args:
             return False
-        if not args[1]:  # missing
+        if len(args) < 2:  # missing
             print("** instance id missing **")
             return False
         obj_id = args[0] + "." + args[1]
@@ -69,7 +69,7 @@ class HBNBCommand(cmd.Cmd):
         args = self.__valid_command(line)
         if not args:
             return False
-        if not args[1]:  # missing
+        if len(args) < 2:  # missing
             print("** instance id missing **")
             return False
         obj_id = args[0] + "." + args[1]
@@ -90,6 +90,7 @@ class HBNBCommand(cmd.Cmd):
             if args[0] not in all_models.keys():
                 print("** class doesn't exist **")
             else:
+                print(args[0])
                 print(models.storage.all(args[0]))
         else:
             print(models.storage.all())
