@@ -10,24 +10,35 @@ all_models = {"BaseModel": BaseModel}
 
 
 class HBNBCommand(cmd.Cmd):
+    """A Class to define an AirBnB console for Web Developement
+
+    Args:
+        cmd (module): a Cmd module, this implements the
+        readline function to accept inputs form user.
+
+    Returns:
+        Bool: Return Booltype base on the execution of the methods.
+    """
+
     prompt = "(hbnb) "
 
     def __valid_command(self, cmd_str):
         args = cmd_str.split(" ")
+
         if not args[0]:  # missing
             print("** class name missing **")
             return False
-        elif args[0] not in all_models.keys():  # doesn't exist
+        elif args[0] not in all_models:  # doesn't exist
             print("** class doesn't exist **")
             return False
         else:
             return args
 
-    def do_quit(self, arg):
+    def do_quit(self, _arg):
         """Quit/Exit program"""
         return True
 
-    def do_EOF(self, arg):
+    def do_eof(self, _arg):
         """Quit/Exit when End-of-File (EOF) character is entered"""
         return True
 
@@ -42,7 +53,7 @@ class HBNBCommand(cmd.Cmd):
             new_model = all_models[args[0]]()
             models.storage.new(new_model)
             models.storage.save()
-            print(new_model.id)  # xxx
+            print(new_model.id)  # xx
 
     def do_show(self, line):
         """
