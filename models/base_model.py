@@ -1,43 +1,28 @@
-#!/usr/bin/python3
-"""
-Implementation of the parent class (BasedModel).
-"""
-import os
-import sys
 import uuid
 from datetime import datetime
-import models
-
-
-sys.path.append('..')
 
 
 class BaseModel:
-    """Parent/base class. All other classes inherits from here."""
+    """BaseModel class for AirBnB objects."""
 
-    def __init__(self, *args, **kwargs):
-        if kwargs:
-            del kwargs['__class__']
-            for k, v in kwargs.items():
-                if k == 'created_at' or k == 'updated_at':
-                    v = datetime.strptime(v, "%Y-%m-%dT%H:%M:%S.%f")
-                setattr(self, k, v)
-        else:
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
-            models.storage.new(self)
+    def __init__(self):
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
 
     def __str__(self):
-        return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
+        return "[{}] ({}) {}".format(
+            self.__class__.__name__,
+            self.id,
+            self.__dict__
+        )
 
     def save(self):
         self.updated_at = datetime.now()
-        models.storage.save()
 
     def to_dict(self):
-        cls_dict = {'__class__': self.__class__.__name__}
-        cls_dict.update({k: v.isoformat()
-                        if isinstance(v, datetime)
-                        else v for k, v in self.__dict__.items()})
-        return cls_dict
+        obj_dict = self.__dict__.copy()
+        obj_dict['__class__'] = self.__class__.__name__
+        obj_dict['created_at'] = self.created_at.isoformat()
+        obj_dict['updated_at'] = self.updated_at.isoformat()
+        return obj_dict
