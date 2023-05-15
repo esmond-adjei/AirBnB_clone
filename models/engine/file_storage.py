@@ -21,8 +21,8 @@ class FileStorage:
         """returns the dictionary `__objects`"""
         if model_type:
             model_cat = list(filter(lambda obj:
-                               str(obj.__class__.__name__) == model_type,
-                               self.__objects.values()))
+                                    str(obj.__class__.__name__) == model_type,
+                                    self.__objects.values()))
             return [str(m) for m in model_cat]
         return self.__objects
 
