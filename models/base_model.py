@@ -2,7 +2,7 @@
 """
 Implementation of the parent class (BasedModel).
 """
-import os
+# import os
 import sys
 import uuid
 from datetime import datetime
@@ -15,7 +15,7 @@ sys.path.append('..')
 class BaseModel:
     """Parent/base class. All other classes inherits from here."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *_args, **kwargs):
         if kwargs:
             del kwargs['__class__']
             for k, v in kwargs.items():
@@ -32,10 +32,17 @@ class BaseModel:
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
 
     def save(self):
+        """A method to save attributes of an instance
+        """
         self.updated_at = datetime.now()
         models.storage.save()
 
     def to_dict(self):
+        """hadles the key-paired values to dictionary
+
+        Returns:
+            dict: return dictionary
+        """
         cls_dict = {'__class__': self.__class__.__name__}
         cls_dict.update({k: v.isoformat()
                         if isinstance(v, datetime)

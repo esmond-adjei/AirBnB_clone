@@ -98,7 +98,7 @@ class HBNBCommand(cmd.Cmd):
         """
         if line:
             args = line.split(" ")
-            if args[0] not in all_models.keys():
+            if args[0] not in all_models:
                 print("** class doesn't exist **")
             else:
                 print(models.storage.all(model_type=args[0]))

@@ -3,14 +3,14 @@
 
 import unittest
 
-import uuid
+# import uuid
 from datetime import datetime
 import models
 
 BaseModel = models.base_model.BaseModel
 
 
-class TestBaseModel:
+class TestBaseModel(unittest.TestCase):
     """
     Tests to run on Base Model.
     """
@@ -32,4 +32,4 @@ class TestBaseModel:
                 self.assertIn(attr, model.__dict__)
                 self.assertIs(type(model.__dict__[attr]), typ)
         self.assertEqual(model.name, "example")
-        self.assertEqual(model.number, 88)
+        self.assertEqual(model.age, 88)

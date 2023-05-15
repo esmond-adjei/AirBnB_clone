@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""she bang path to python"""
 
 import unittest
 from models.base_model import BaseModel
@@ -28,5 +29,4 @@ class TestBaseModel(unittest.TestCase):
         # Assert that the updated_at attribute is updated
         self.assertNotEqual(model.created_at, model.updated_at)
 
-    # Add more test methods as needed
-
+    # more test methods will be added in the need be
