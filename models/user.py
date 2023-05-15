@@ -7,7 +7,7 @@ from models.base_model import BaseModel
 class User:
     """User class implementation"""
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.username = ""
         self.password = ""
