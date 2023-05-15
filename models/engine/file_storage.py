@@ -23,7 +23,7 @@ class FileStorage:
         """Returns the dictionary `__objects`"""
         return self.__objects
 
-    def save(self):
+    def save(self, model=None):
         """Serializes objects to JSON file (path: {self.__file_path})"""
         json_objs = {}
         # Convert object to dictionary before saving to file
@@ -48,7 +48,7 @@ class FileStorage:
                 # from all_classes dictionary
                 for obj_id, obj_dict in json_obj.items():
                     class_type = obj_dict["__class__"]
-                    FileStorage.__objects[obj_id] = all_classes[
+                    self.__objects[obj_id] = all_classes[
                         class_type](**obj_dict)
             except json.JSONDecodeError as err:
                 print(f"Error occurred while decoding JSON: {err}")
