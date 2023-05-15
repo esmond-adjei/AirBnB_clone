@@ -15,7 +15,7 @@ class TestBaseModel(unittest.TestCase):
     def test_instantiation(self):
         """Tests for object instantiation"""
         model = BaseModel()
-        self.assertIs(model, BaseModel)
+        self.assertIs(type(model), BaseModel)
         model.name = 'example'
         model.age = 88
         attrs_types = {
@@ -28,7 +28,7 @@ class TestBaseModel(unittest.TestCase):
         for attr, typ in attrs_types.items():
             with self.subTest(attr=attr, typ=typ):
                 self.assertIn(attr, model.__dict__)
-                self.assertIs(model.__dict__[attr], typ)
+                self.assertIs(type(model.__dict__[attr]), typ)
         self.assertEqual(model.name, "example")
         self.assertEqual(model.age, 88)
 
