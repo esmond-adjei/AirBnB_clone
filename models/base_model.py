@@ -4,11 +4,12 @@ Implementation of the parent class (BasedModel).
 """
 import os
 import sys
-sys.path.append('..')
-
 import uuid
 from datetime import datetime
 import models
+
+
+sys.path.append('..')
 
 
 class BaseModel:
