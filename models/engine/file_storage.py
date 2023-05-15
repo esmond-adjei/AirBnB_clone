@@ -40,16 +40,16 @@ class FileStorage:
         # convert object to dictionary before saving to file
         for obj_id, obj in self.__objects.items():
             json_objs[obj_id] = obj.to_dict()
-        with open(self.__file_path, 'w', encoding='utf-8') as f:
-            json.dump(json_objs, f)
+        with open(self.__file_path, 'w', encoding='utf-8') as _f:
+            json.dump(json_objs, _f)
 
     def reload(self):
         """deserializes the JSON file (path: {self.__file_path})"""
         all_classes = {"BaseModel": BaseModel}
 
         try:
-            with open(self.__file_path, 'r', encoding='utf-8') as f:
-                json_obj = json.load(f)
+            with open(self.__file_path, 'r', encoding='utf-8') as _f:
+                json_obj = json.load(_f)
 
             # converting from dictionary objects to class objects.
             # this is done by selecting the class type
