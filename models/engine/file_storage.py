@@ -2,6 +2,7 @@
 """Definition of file storage class"""
 
 import json
+import os
 from models.base_model import BaseModel
 
 
@@ -40,28 +41,33 @@ class FileStorage:
         # Convert object to dictionary before saving to file
         for obj_id, obj in self.__objects.items():
             json_objs[obj_id] = obj.to_dict()
-        with open(FileStorage.__file_path, 'w', encoding='utf-8') as f:
-            json.dump(json_objs, f)
+        try:
+            with open(FileStorage.__file_path, 'w', encoding='utf-8') as file:
+                json.dump(json_objs, file)
+        except FileNotFoundError as err:
+            print(f"Error occurred while opening file: {err}")
 
     def reload(self):
         """Deserializes the JSON file (path: {self.__file_path})"""
         all_classes = {"BaseModel": BaseModel}
-        try:
-            with open(FileStorage.__file_path, 'r', encoding='utf-8') as f:
-                json_obj = json.load(f)
+        if os.path.isfile(FileStorage.__file_path):
+            try:
+                with open(FileStorage.__file_path,
+                          'r', encoding='utf-8') as file:
+                    json_obj = json.load(file)
 
-            # Converting from dictionary objects to class objects.
-            # This is done by selecting the class type
-            # from all_classes dictionary
-            for obj_id, obj_dict in json_obj.items():
-                class_type = obj_dict["__class__"]
-                FileStorage.__objects[obj_id] = all_classes[
-                    class_type](**obj_dict)
-        except FileNotFoundError as err:
-            print(f"File not found: {err}")
-        except json.JSONDecodeError as err:
-            print(f"Error occurred while decoding JSON: {err}")
-        except KeyError as err:
-            print(f"Key error occurred: {err}")
-        except Exception as err:
-            print(f"An error occurred: {err}")
+                # Converting from dictionary objects to class objects.
+                # This is done by selecting the class type
+                # from all_classes dictionary
+                for obj_id, obj_dict in json_obj.items():
+                    class_type = obj_dict["__class__"]
+                    FileStorage.__objects[obj_id] = all_classes[
+                            class_type](**obj_dict)
+            except json.JSONDecodeError as err:
+                print(f"Error occurred while decoding JSON: {err}")
+            except KeyError as err:
+                print(f"Key error occurred: {err}")
+            except Exception as err:
+                print(f"An error occurred: {err}")
+        else:
+            print("No file")
