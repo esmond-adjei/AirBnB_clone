@@ -4,8 +4,9 @@
 import cmd
 import models
 from models.base_model import BaseModel
+from models.user import User
 
-all_models = {"BaseModel": BaseModel}
+all_models = {"BaseModel": BaseModel, "User": User}
 
 
 class HBNBCommand(cmd.Cmd):
@@ -37,7 +38,7 @@ class HBNBCommand(cmd.Cmd):
         """Quit/Exit program"""
         return True
 
-    def do_eof(self, _arg):
+    def do_EOF(self, _arg):
         """Quit/Exit when End-of-File (EOF) character is entered"""
         return True
 
@@ -104,6 +105,28 @@ class HBNBCommand(cmd.Cmd):
                 print(models.storage.all(model_type))
         else:
             print(models.storage.all())
+
+    def do_update(self, line):
+        """Update an instance based on the class name and id"""
+        args = self.__valid_command(line)
+        if not args:
+            return False
+        if len(args) < 2:
+            print("** instance id missing **")
+            return False
+        obj_id = args[0] + "." + args[1]
+        obj = models.storage.all().get(obj_id, None)
+        if not obj:
+            print("** no instance found **")
+            return False
+        if len(args) < 3:
+            print("** attribute name missing **")
+            return False
+        if len(args) < 4:
+            print("** value missing **")
+            return False
+        setattr(obj, args[2], args[3])
+        models.storage.save()
 
 
 if __name__ == "__main__":
