@@ -32,7 +32,6 @@ class FileStorage:
         with open(FileStorage.__file_path, "w", encoding="utf-8") as f:
             d = {k: v.to_dict() for k, v in FileStorage.__objects.items()}
             json.dump(d, f)
-        models.storage.save()
 
     def classes(self):
         """Returns a dictionary of valid classes and their references"""
