@@ -27,15 +27,14 @@ class FileStorage:
         key = "{}.{}".format(type(obj).__name__, obj.id)
         FileStorage.__objects[key] = obj
 
-    def save(self):
+    def save(self, models):
         """Updates updated_at with the current datetime"""
-        now = datetime.datetime.now()
-        for obj in FileStorage.__objects.values():
-            obj.updated_at = now.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        self.reload()
+        self.updated_at = datetime.datetime
+        models.storage.save()
 
     def classes(self):
         """Returns a dictionary of valid classes and their references"""
+
         classes = {
             "BaseModel": BaseModel,
             "User": User,
@@ -44,7 +43,7 @@ class FileStorage:
             "Amenity": Amenity,
             "Place": Place,
             "Review": Review
-        }
+            }
         return classes
 
     def reload(self):
@@ -55,50 +54,56 @@ class FileStorage:
             obj_dict = json.load(f)
             obj_dict = {k: self.classes()[v["__class__"]](**v)
                         for k, v in obj_dict.items()}
-            # Overwrite the existing objects
+            # TODO: should this overwrite or insert?
             FileStorage.__objects = obj_dict
 
     def attributes(self):
         """Returns the valid attributes and their types for classname"""
         attributes = {
-            "BaseModel": {
-                "id": str,
-                "created_at": datetime.datetime,
-                "updated_at": datetime.datetime
-            },
-            "User": {
-                "email": str,
-                "password": str,
-                "first_name": str,
-                "last_name": str
-            },
-            "State": {
-                "name": str
-            },
-            "City": {
-                "state_id": str,
-                "name": str
-            },
-            "Amenity": {
-                "name": str
-            },
-            "Place": {
-                "city_id": str,
-                "user_id": str,
-                "name": str,
-                "description": str,
-                "number_rooms": int,
-                "number_bathrooms": int,
-                "max_guest": int,
-                "price_by_night": int,
-                "latitude": float,
-                "longitude": float,
-                "amenity_ids": list
-            },
-            "Review": {
-                "place_id": str,
-                "user_id": str,
-                "text": str
-            }
-        }
+                "BaseModel": {
+                    "id": str,
+                    "created_at": datetime.datetime,
+                    "updated_at": datetime.datetime
+                    },
+
+                "User": {
+                    "email": str,
+                    "password": str,
+                    "first_name": str,
+                    "last_name": str
+                    },
+
+                "State": {
+                    "name": str
+                    },
+
+                "City": {
+                    "state_id": str,
+                    "name": str
+                    },
+
+                "Amenity": {
+                    "name": str
+                    },
+
+                "Place": {
+                    "city_id": str,
+                    "user_id": str,
+                    "name": str,
+                    "description": str,
+                    "number_rooms": int,
+                    "number_bathrooms": int,
+                    "max_guest": int,
+                    "price_by_night": int,
+                    "latitude": float,
+                    "longitude": float,
+                    "amenity_ids": list
+                    },
+
+                "Review": {
+                    "place_id": str,
+                    "user_id": str,
+                    "text": str
+                    }
+                }
         return attributes
