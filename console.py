@@ -3,6 +3,7 @@
 
 
 import cmd
+import shlex
 import models
 from models.base_model import BaseModel
 
@@ -13,7 +14,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
     def __valid_command(self, cmd_str):
-        args = cmd_str.split(" ")
+        args = cmd_str.split(" ")  # shlex.split(cmd_str)
         if not args[0]:  # missing
             print("** class name missing **")
             return False
@@ -22,6 +23,18 @@ class HBNBCommand(cmd.Cmd):
             return False
         else:
             return args
+
+    def __valid_id(self, cmd_args):
+        if len(cmd_args) < 2:  # missing id in command
+            print("** instance id missing **")
+            return False
+        obj_id = cmd_args[0] + "." + cmd_args[1]
+        obj = models.storage.all().get(obj_id, 0)
+        if not obj:  # id doesn't exist in DB
+            print("** no instance found **")
+            return False
+        else:
+            return obj
 
     def do_quit(self, arg):
         """Quit/Exit program"""
@@ -42,7 +55,7 @@ class HBNBCommand(cmd.Cmd):
             new_model = all_models[args[0]]()
             models.storage.new(new_model)
             models.storage.save()
-            print(new_model.id)  # xxx
+            print(new_model.id)
 
     def do_show(self, line):
         """
@@ -52,14 +65,8 @@ class HBNBCommand(cmd.Cmd):
         args = self.__valid_command(line)
         if not args:
             return False
-        if len(args) < 2:  # missing
-            print("** instance id missing **")
-            return False
-        obj_id = args[0] + "." + args[1]
-        obj = models.storage.all().get(obj_id, 0)
-        if not obj:  # doesn't exist
-            print("** no instance found **")
-        else:
+        obj = self.__valid_id(args)
+        if obj:
             print(obj)
 
     def do_destroy(self, line):
@@ -69,14 +76,8 @@ class HBNBCommand(cmd.Cmd):
         args = self.__valid_command(line)
         if not args:
             return False
-        if len(args) < 2:  # missing
-            print("** instance id missing **")
-            return False
         obj_id = args[0] + "." + args[1]
-        obj = models.storage.all().get(obj_id, 0)
-        if not obj:  # doesn't exist
-            print("** no instance found **")
-        else:
+        if self.__valid_id(args):
             models.storage.delete(obj_id)
             models.storage.save()
 
@@ -93,6 +94,39 @@ class HBNBCommand(cmd.Cmd):
                 print(models.storage.all(model_type=args[0]))
         else:
             print(models.storage.all())
+
+    def do_update(self, line):
+        """
+        Updates an instance based on the class name
+        and id by adding or updating attribute
+        """
+        args = self.__valid_command(line)
+        if not args:
+            return False
+        obj = self.__valid_id(args)
+        if not obj:
+            return False
+        if len(args) <= 2:
+            print("** attribute name missing **")
+            return False
+        elif len(args) <= 3:
+            print("** value missing **")
+            return False
+        else:
+            value = args[3]
+            print("all args: ", args)
+            if ('"' in value or "'" in value) \
+                    and (value[0] == value[-1]):
+                value = value.replace('"', '').replace("'", '')
+            else:
+                try:
+                    value = eval(value)
+                except Exception as err:
+                    print("** Invalid attribute type **", err)
+                    return False
+            setattr(obj, args[2], value)
+            obj.save()
+            print(obj)
 
 
 if __name__ == "__main__":
