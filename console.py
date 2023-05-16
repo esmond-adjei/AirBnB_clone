@@ -3,9 +3,8 @@
 
 import cmd
 import models
-from models import storage
 
-all_models = storage.classes()
+all_models = models.storage.classes()
 
 
 class HBNBCommand(cmd.Cmd):
