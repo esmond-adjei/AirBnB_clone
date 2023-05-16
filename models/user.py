@@ -1,14 +1,12 @@
 #!/usr/bin/python3
-"""Implementation of user class"""
-
+"""This module creates a User class"""
 from models.base_model import BaseModel
 
 
-class User:
-    """User class implementation"""
+class User(BaseModel):
+    """Implementation of the Class for managing user objects"""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.username = ""
-        self.password = ""
-        self.email = ""
+    email = ""
+    password = ""
+    first_name = ""
+    last_name = ""
