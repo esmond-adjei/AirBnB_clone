@@ -18,7 +18,7 @@ class FileStorage:
     __file_path = "file_object.json"
     __objects = {}
 
-    def all(self, model_type):
+    def all(self, model_type=None):
         """Returns the dictionary __objects
         or objects of a specific model type"""
         if model_type:
