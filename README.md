@@ -48,9 +48,3 @@ This Project is from 'ALS SE a Full-Stack mainelopment Program' This stage imple
     * update - Updates existing attributes an object based on class name and UUID
 
     * quit - Exits the program (EOF will as well)
-
-
-##### Alternative Syntax
-Users are able to issue a number of console command using an alternative syntax:
-
-	Usage: <class_name>.<command>([<id>[name_arg value_arg]|[kwargs]])
