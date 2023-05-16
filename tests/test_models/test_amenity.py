@@ -7,10 +7,10 @@ Unittest classes:
     TestAmenity_to_dict
 """
 import os
-import models
 import unittest
 from datetime import datetime
 from time import sleep
+import models
 from models.amenity import Amenity
 
 
@@ -89,7 +89,7 @@ class TestAmenity_save(unittest.TestCase):
     """Unittests for testing save method of the Amenity class."""
 
     @classmethod
-    def setUp(cls,self):
+    def setUp(cls, self):
         try:
             os.rename("file.json", "tmp")
         except IOError:

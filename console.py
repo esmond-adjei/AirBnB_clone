@@ -2,7 +2,7 @@
 """console program for AirBnB clone program"""
 
 import cmd
-from models.file_storage import storage
+from models.storage import storage
 
 all_models = storage.classes()
 
