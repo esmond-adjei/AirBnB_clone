@@ -27,31 +27,23 @@ class FileStorage:
         key = "{}.{}".format(type(obj).__name__, obj.id)
         FileStorage.__objects[key] = obj
 
-    def save(self, models):
+    def save(self):
         """ serializes __objects to the JSON file (path: __file_path)"""
-        json_objs = {}
-        # Convert object to dictionary before saving to file
-        for obj_id, obj in self.__objects.items():
-            json_objs[obj_id] = obj.to_dict()
-        try:
-            with open(FileStorage.__file_path, 'w', encoding='utf-8') as file:
-                json.dump(json_objs, file)
-        except FileNotFoundError as err:
-            print(f"Error occurred while opening file: {err}")
-        models.storage.save()
+        with open(FileStorage.__file_path, "w", encoding="utf-8") as f:
+            d = {k: v.to_dict() for k, v in FileStorage.__objects.items()}
+            json.dump(d, f)
 
     def classes(self):
         """Returns a dictionary of valid classes and their references"""
 
-        classes = {
-            "BaseModel": BaseModel,
-            "User": User,
-            "State": State,
-            "City": City,
-            "Amenity": Amenity,
-            "Place": Place,
-            "Review": Review
-            }
+        classes = {"BaseModel": BaseModel,
+                   "User": User,
+                   "State": State,
+                   "City": City,
+                   "Amenity": Amenity,
+                   "Place": Place,
+                   "Review": Review
+                   }
         return classes
 
     def reload(self):
@@ -68,50 +60,37 @@ class FileStorage:
     def attributes(self):
         """Returns the valid attributes and their types for classname"""
         attributes = {
-                "BaseModel": {
-                    "id": str,
-                    "created_at": datetime.datetime,
-                    "updated_at": datetime.datetime
-                    },
-
-                "User": {
-                    "email": str,
-                    "password": str,
-                    "first_name": str,
-                    "last_name": str
-                    },
-
-                "State": {
-                    "name": str
-                    },
-
-                "City": {
-                    "state_id": str,
-                    "name": str
-                    },
-
-                "Amenity": {
-                    "name": str
-                    },
-
-                "Place": {
-                    "city_id": str,
-                    "user_id": str,
-                    "name": str,
-                    "description": str,
-                    "number_rooms": int,
-                    "number_bathrooms": int,
-                    "max_guest": int,
-                    "price_by_night": int,
-                    "latitude": float,
-                    "longitude": float,
-                    "amenity_ids": list
-                    },
-
-                "Review": {
-                    "place_id": str,
-                    "user_id": str,
-                    "text": str
-                    }
+                "BaseModel":
+                {"id": str,
+                 "created_at": datetime.datetime,
+                 "updated_at": datetime.datetime},
+                "User":
+                {"email": str,
+                 "password": str,
+                 "first_name": str,
+                 "last_name": str},
+                "State":
+                {"name": str},
+                "City":
+                {"state_id": str,
+                 "name": str},
+                "Amenity":
+                {"name": str},
+                "Place":
+                {"city_id": str,
+                 "user_id": str,
+                 "name": str,
+                 "description": str,
+                 "number_rooms": int,
+                 "number_bathrooms": int,
+                 "max_guest": int,
+                 "price_by_night": int,
+                 "latitude": float,
+                 "longitude": float,
+                 "amenity_ids": list},
+                "Review":
+                {"place_id": str,
+                 "user_id": str,
+                 "text": str}
                 }
         return attributes
