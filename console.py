@@ -84,7 +84,7 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return False
         obj_id = args[0] + "." + args[1]
-        obj = models.storage.all().get(obj_id, 0)
+        obj = models.storage.all(modelt=None).get(obj_id, 0)
         if not obj:  # doesn't exist
             print("** no instance found **")
         else:
@@ -104,7 +104,7 @@ class HBNBCommand(cmd.Cmd):
                 modelt = args[0]
                 print(models.storage.all(modelt))
         else:
-            print(models.storage.all())
+            print(models.storage.all(modelt=None))
 
 
 if __name__ == "__main__":

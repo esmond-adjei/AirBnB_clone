@@ -5,6 +5,7 @@ import json
 import os
 from models.base_model import BaseModel
 from models.user import User
+from models.email import Email
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
@@ -62,7 +63,8 @@ class FileStorage:
             "City": City,
             "Amenity": Amenity,
             "Place": Place,
-            "Review": Review
+            "Review": Review,
+            "Email": Email
             }
         return classes
 
@@ -87,11 +89,15 @@ class FileStorage:
                     },
 
                 "User": {
-                    "email": str,
                     "password": str,
                     "first_name": str,
                     "last_name": str
                     },
+
+                "Email": {
+                    "email_id": str,
+                    "email": str
+                },
 
                 "State": {
                     "name": str
