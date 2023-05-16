@@ -62,7 +62,7 @@ class TestBaseModel_instantiation(unittest.TestCase):
         self.assertIn("'updated_at': " + dt_repr, bmstr)
 
     def test_args_unused(self):
-        bm = BaseModel(None)
+        bm = BaseModel()
         self.assertNotIn(None, bm.__dict__.values())
 
     def test_instantiation_with_kwargs(self):

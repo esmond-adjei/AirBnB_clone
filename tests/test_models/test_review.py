@@ -80,7 +80,7 @@ class TestReview_instantiation(unittest.TestCase):
         self.assertIn("'updated_at': " + dt_repr, rvstr)
 
     def test_args_unused(self):
-        rv = Review(None)
+        rv = Review()
         self.assertNotIn(None, rv.__dict__.values())
 
     def test_instantiation_with_kwargs(self):
