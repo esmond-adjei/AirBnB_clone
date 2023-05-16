@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-"""Implementation of the parent class (BasedModel)."""
 import sys
 import uuid
 from datetime import datetime
