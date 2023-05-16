@@ -84,6 +84,8 @@ class HBNBCommand(cmd.Cmd):
         args = self.__valid_command(line)
         if not args:
             return False
+        if not self.__valid_id(args):
+            return False
         obj_id = args[0] + "." + args[1]
         if self.__valid_id(args):
             models.storage.delete(obj_id)
