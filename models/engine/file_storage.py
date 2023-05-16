@@ -33,6 +33,17 @@ class FileStorage:
             d = {k: v.to_dict() for k, v in FileStorage.__objects.items()}
             json.dump(d, f)
 
+    def delete(self, obj):
+        """Deletes obj from __objects if it exists"""
+        if obj:
+            key = "{}.{}".format(type(obj).__name__, obj.id)
+            del FileStorage.__objects[key]
+
+    def destroy(self, obj):
+        """Deletes obj from __objects and saves the changes"""
+        self.delete(obj)
+        self.save()
+
     def classes(self):
         """Returns a dictionary of valid classes and their references"""
 
