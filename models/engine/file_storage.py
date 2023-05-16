@@ -28,8 +28,16 @@ class FileStorage:
         FileStorage.__objects[key] = obj
 
     def save(self, models):
-        """Updates updated_at with the current datetime"""
-        self.updated_at = datetime.datetime
+        """ serializes __objects to the JSON file (path: __file_path)"""
+        json_objs = {}
+        # Convert object to dictionary before saving to file
+        for obj_id, obj in self.__objects.items():
+            json_objs[obj_id] = obj.to_dict()
+        try:
+            with open(FileStorage.__file_path, 'w', encoding='utf-8') as file:
+                json.dump(json_objs, file)
+        except FileNotFoundError as err:
+            print(f"Error occurred while opening file: {err}")
         models.storage.save()
 
     def classes(self):
