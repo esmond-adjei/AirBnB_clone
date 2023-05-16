@@ -11,7 +11,7 @@ sys.path.append('..')
 class BaseModel:
     """Parent/base class. All other classes inherits from here."""
 
-    def __init__(self, *_args, **kwargs):
+    def __init__(self, *args, **kwargs):
         if kwargs:
             del kwargs['__class__']
             for k, v in kwargs.items():
