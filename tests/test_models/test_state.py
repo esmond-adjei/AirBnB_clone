@@ -131,7 +131,7 @@ class TestState_save(unittest.TestCase):
         st = State()
         st.save()
         stid = "State." + st.id
-        with open("file.json", "r", endoding='utf-8') as f:
+        with open("file.json", "r", encoding='utf-8') as f:
             self.assertIn(stid, f.read())
 
 

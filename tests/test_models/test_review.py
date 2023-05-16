@@ -100,7 +100,7 @@ class TestReview_save(unittest.TestCase):
     """Unittests for testing save method of the Review class."""
 
     @classmethod
-    def setUp(self):
+    def setUp(cls, self):
         try:
             os.rename("file.json", "tmp")
         except IOError:
@@ -137,13 +137,13 @@ class TestReview_save(unittest.TestCase):
     def test_save_with_arg(self):
         rv = Review()
         with self.assertRaises(TypeError):
-            rv.save(None)
+            rv.save()
 
     def test_save_updates_file(self):
         rv = Review()
         rv.save()
         rvid = "Review." + rv.id
-        with open("file.json", "r") as f:
+        with open("file.json", "r", encoding='utf-8') as f:
             self.assertIn(rvid, f.read())
 
 
