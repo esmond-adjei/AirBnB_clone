@@ -12,7 +12,7 @@ class BaseModel:
 
     def __init__(self, *_args, **kwargs):
         if kwargs:
-            del kwargs['__class__']
+            del kwargs.pop['__class__', None]
             for k, v in kwargs.items():
                 if k == 'created_at' or k == 'updated_at':
                     v = datetime.strptime(v, "%Y-%m-%dT%H:%M:%S.%f")
