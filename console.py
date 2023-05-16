@@ -23,7 +23,7 @@ class HBNBCommand(cmd.Cmd):
 
     def __valid_command(self, cmd_str):
         args = shlex.split(cmd_str)
-        if not args[0]:  # missing
+        if len(args) < 1:  # missing
             print("** class name missing **")
             return False
         elif args[0] not in all_models:  # doesn't exist
