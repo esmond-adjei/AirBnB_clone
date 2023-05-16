@@ -1,61 +1,131 @@
 #!/usr/bin/python3
-"""Definition of file storage class"""
-
+"""Module for FileStorage class."""
+import datetime
 import json
+import os
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class FileStorage:
-    """Serializes instances to a JSON file
-       and deserializes JSON file to instances."""
 
-    __file_path = 'file_object.json'
+    """Class for storing and retrieving data"""
+    __file_path = "file_object.json"
     __objects = {}
 
-    def new(self, obj):
-        """sets in objects the object with key `<obj name>.id`"""
-        if obj is not None:
-            obj_id = obj.__class__.__name__ + "." + obj.id
-            self.__objects[obj_id] = obj
-
     def all(self, model_type=None):
-        """returns the dictionary `__objects`"""
+        """Returns the dictionary __objects
+        or objects of a specific model type"""
         if model_type:
-            model_cat = list(filter(lambda obj:
-                               str(obj.__class__.__name__) == model_type,
-                               self.__objects.values()))
-            return [str(m) for m in model_cat]
-        return self.__objects
+            objects = {
+                key: obj
+                for key, obj in FileStorage.__objects.items()
+                if isinstance(obj, self.classes().get(model_type))
+            }
+            return [str(obj) for obj in objects.values()]
+        return FileStorage.__objects
 
-    def delete(self, model_id):
-        """deletes a model from data `__objects`"""
-        if self.__objects.get(model_id, 0):
-            del self.__objects[model_id]
-        else:
-            print("Model not found")  # xxx
+    def new(self, obj):
+        """sets in __objects the obj with key <obj class name>.id"""
+        key = f"{type(obj).__name__}.{obj.id}"
+        FileStorage.__objects[key] = obj
 
     def save(self):
-        f"""serializes objects to JSON file (path: {self.__file_path})"""
-        json_objs = {}
-        # convert object to dictionary before saving to file
-        for obj_id, obj in self.__objects.items():
-            json_objs[obj_id] = obj.to_dict()
-        with open(self.__file_path, 'w') as f:
-            json.dump(json_objs, f)
+        """ serializes __objects to the JSON file (path: __file_path)"""
+        with open(FileStorage.__file_path, "w", encoding="utf-8") as file:
+            dic_t = {
+                k: v.to_dict()
+                for k, v in FileStorage.__objects.items()
+                }
+            json.dump(dic_t, file)
+
+    def delete(self, obj):
+        """Deletes obj from __objects if it exists"""
+        if obj:
+            key = f"{type(obj).__name__}.{obj.id}"
+            del FileStorage.__objects[key]
+
+    def destroy(self, obj):
+        """Deletes obj from __objects and saves the changes"""
+        self.delete(obj)
+        self.save()
+
+    def classes(self):
+        """Returns a dictionary of valid classes and their references"""
+
+        classes = {
+            "BaseModel": BaseModel,
+            "User": User,
+            "State": State,
+            "City": City,
+            "Amenity": Amenity,
+            "Place": Place,
+            "Review": Review
+            }
+        return classes
 
     def reload(self):
-        f"""deserializes the JSON file (path: {self.__file_path})"""
-        from models.base_model import BaseModel
-        all_classes = {"BaseModel": BaseModel}
+        """Reloads the stored objects"""
+        if not os.path.isfile(FileStorage.__file_path):
+            return
+        with open(FileStorage.__file_path, "r", encoding="utf-8") as file:
+            obj_dict = json.load(file)
+            obj_dict = {k: self.classes()[v["__class__"]](**v)
+                        for k, v in obj_dict.items()}
+            FileStorage.__objects = obj_dict
 
-        try:
-            with open(self.__file_path, 'r') as f:
-                json_obj = json.load(f)
+    def attributes(self):
+        """Returns the valid attributes and their types for classname"""
+        attributes = {
+                "BaseModel": {
+                    "id": str,
+                    "created_at": datetime.datetime,
+                    "updated_at": datetime.datetime
+                    },
 
-            # converting from dictionary objects to class objects.
-            # this is done by selecting the class type
-            # from all_classes dictionary
-            for obj_id, obj_dict in json_obj.items():
-                class_type = obj_dict["__class__"]
-                self.__objects[obj_id] = all_classes[class_type](**obj_dict)
-        except Exception as err:
-            print(f"Error occurred while opening file: {err}")
+                "User": {
+                    "email": str,
+                    "password": str,
+                    "first_name": str,
+                    "last_name": str
+                    },
+
+                "State": {
+                    "name": str
+                    },
+
+                "City": {
+                    "state_id": str,
+                    "name": str
+                    },
+
+                "Amenity": {
+                    "name": str
+                    },
+
+                "Place": {
+                    "city_id": str,
+                    "user_id": str,
+                    "name": str,
+                    "description": str,
+                    "number_rooms": int,
+                    "number_bathrooms": int,
+                    "max_guest": int,
+                    "price_by_night": int,
+                    "latitude": float,
+                    "longitude": float,
+                    "amenity_ids": list
+                    },
+
+                "Review": {
+                    "place_id": str,
+                    "user_id": str,
+                    "text": str
+                    }
+                }
+        return attributes

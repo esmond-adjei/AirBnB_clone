@@ -1,24 +1,32 @@
 #!/usr/bin/python3
 """console program for AirBnB clone program"""
 
-
 import cmd
 import shlex
 import models
-from models.base_model import BaseModel
 
-all_models = {"BaseModel": BaseModel}
+all_models = models.storage.classes()
 
 
 class HBNBCommand(cmd.Cmd):
+    """A Class to define an AirBnB console for Web Developement
+
+    Args:
+        cmd (module): a Cmd module, this implements the
+        readline function to accept inputs form user.
+
+    Returns:
+        Bool: Return Booltype base on the execution of the methods.
+    """
+
     prompt = "(hbnb) "
 
     def __valid_command(self, cmd_str):
-        args = cmd_str.split(" ")  # shlex.split(cmd_str)
+        args = shlex.split(cmd_str)
         if not args[0]:  # missing
             print("** class name missing **")
             return False
-        elif args[0] not in all_models.keys():  # doesn't exist
+        elif args[0] not in all_models:  # doesn't exist
             print("** class doesn't exist **")
             return False
         else:
@@ -36,11 +44,11 @@ class HBNBCommand(cmd.Cmd):
         else:
             return obj
 
-    def do_quit(self, arg):
+    def do_quit(self, _arg):
         """Quit/Exit program"""
         return True
 
-    def do_EOF(self, arg):
+    def do_EOF(self, _arg):
         """Quit/Exit when End-of-File (EOF) character is entered"""
         return True
 
@@ -88,10 +96,11 @@ class HBNBCommand(cmd.Cmd):
         """
         if line:
             args = line.split(" ")
-            if args[0] not in all_models.keys():
+            if args[0] not in all_models:
                 print("** class doesn't exist **")
             else:
-                print(models.storage.all(model_type=args[0]))
+                model_type = args[0]
+                print(models.storage.all(model_type))
         else:
             print(models.storage.all())
 
@@ -106,27 +115,16 @@ class HBNBCommand(cmd.Cmd):
         obj = self.__valid_id(args)
         if not obj:
             return False
-        if len(args) <= 2:
+        obj_id = args[0] + "." + args[1]
+        obj = models.storage.all().get(obj_id, None)
+        if len(args) < 3:
             print("** attribute name missing **")
             return False
-        elif len(args) <= 3:
+        if len(args) < 4:
             print("** value missing **")
             return False
-        else:
-            value = args[3]
-            print("all args: ", args)
-            if ('"' in value or "'" in value) \
-                    and (value[0] == value[-1]):
-                value = value.replace('"', '').replace("'", '')
-            else:
-                try:
-                    value = eval(value)
-                except Exception as err:
-                    print("** Invalid attribute type **", err)
-                    return False
-            setattr(obj, args[2], value)
-            obj.save()
-            print(obj)
+        setattr(obj, args[2], args[3])
+        models.storage.save()
 
 
 if __name__ == "__main__":
