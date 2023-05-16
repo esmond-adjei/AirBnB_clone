@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """console program for AirBnB clone program"""
 
-
 import cmd
 import models
 from models.base_model import BaseModel
@@ -67,7 +66,7 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return False
         obj_id = args[0] + "." + args[1]
-        obj = models.storage.all().get(obj_id, 0)
+        obj = models.storage.all(model_type=None).get(obj_id, 0)
         if not obj:  # doesn't exist
             print("** no instance found **")
         else:
@@ -84,7 +83,7 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return False
         obj_id = args[0] + "." + args[1]
-        obj = models.storage.all(modelt=None).get(obj_id, 0)
+        obj = models.storage.all(model_type=None).get(obj_id, 0)
         if not obj:  # doesn't exist
             print("** no instance found **")
         else:
@@ -101,12 +100,11 @@ class HBNBCommand(cmd.Cmd):
             if args[0] not in all_models:
                 print("** class doesn't exist **")
             else:
-                modelt = args[0]
-                print(models.storage.all(modelt))
+                model_type = args[0]
+                print(models.storage.all(model_type))
         else:
-            print(models.storage.all(modelt=None))
+            print(models.storage.all(model_type=None))
 
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
-
