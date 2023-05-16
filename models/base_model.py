@@ -1,56 +1,46 @@
 #!/usr/bin/python3
-"""This script is the base model"""
-
+"""Implementation of the parent class (BasedModel)."""
+import sys
 import uuid
 from datetime import datetime
-from models import storage
+import models
+
+sys.path.append('..')
 
 
 class BaseModel:
+    """Parent/base class. All other classes inherits from here."""
 
-    """Class from which all other classes will inherit"""
-
-    def __init__(self, *args, **kwargs):
-        """Initializes instance attributes
-
-        Args:
-            - *args: list of arguments
-            - **kwargs: dict of key-values arguments
-        """
-
-        if kwargs is not None and kwargs != {}:
-            for key in kwargs:
-                if key == "created_at":
-                    self.__dict__["created_at"] = datetime.strptime(
-                        kwargs["created_at"], "%Y-%m-%dT%H:%M:%S.%f")
-                elif key == "updated_at":
-                    self.__dict__["updated_at"] = datetime.strptime(
-                        kwargs["updated_at"], "%Y-%m-%dT%H:%M:%S.%f")
-                else:
-                    self.__dict__[key] = kwargs[key]
+    def __init__(self, *_args, **kwargs):
+        if kwargs:
+            del kwargs['__class__']
+            for k, v in kwargs.items():
+                if k == 'created_at' or k == 'updated_at':
+                    v = datetime.strptime(v, "%Y-%m-%dT%H:%M:%S.%f")
+                setattr(self, k, v)
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            storage.new(self)
+            models.storage.new(self)
 
     def __str__(self):
-        """Returns official string representation"""
-
-        return "[{}] ({}) {}".\
-            format(type(self).__name__, self.id, self.__dict__)
+        return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
 
     def save(self):
-        """updates the public instance attribute updated_at"""
-
+        """A method to save attributes of an instance
+        """
         self.updated_at = datetime.now()
-        storage.save()
+        models.storage.save()
 
     def to_dict(self):
-        """returns a dictionary containing all keys/values of __dict__"""
+        """hadles the key-paired values to dictionary
 
-        my_dict = self.__dict__.copy()
-        my_dict["__class__"] = type(self).__name__
-        my_dict["created_at"] = my_dict["created_at"].isoformat()
-        my_dict["updated_at"] = my_dict["updated_at"].isoformat()
-        return my_dict
+        Returns:
+            dict: return dictionary
+        """
+        cls_dict = {'__class__': self.__class__.__name__}
+        cls_dict.update({k: v.isoformat()
+                        if isinstance(v, datetime)
+                        else v for k, v in self.__dict__.items()})
+        return cls_dict
