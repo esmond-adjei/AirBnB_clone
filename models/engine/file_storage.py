@@ -2,7 +2,6 @@
 """Definition of file storage class"""
 
 import json
-import os
 from models.base_model import BaseModel
 
 
@@ -10,7 +9,7 @@ class FileStorage:
     """Serializes instances to a JSON file
     and deserializes JSON file to instances."""
 
-    __file_path = 'file.json'
+    __file_path = 'file_object.json'
     __objects = {}
 
     def new(self, obj):
@@ -45,26 +44,18 @@ class FileStorage:
             json.dump(json_objs, _f)
 
     def reload(self):
-        """Deserializes the JSON file (path: {self.__file_path})"""
+        """deserializes the JSON file (path: {self.__file_path})"""
         all_classes = {"BaseModel": BaseModel}
-        if not os.path.isfile(FileStorage.__file_path):
-            try:
-                # Create the file if it doesn't exist
-                open(FileStorage.__file_path, 'w', encoding='utf-8').close()
-            except IOError as err:
-                f_store = FileStorage.__file_path
-                print(f"Error occurred while creating file {f_store}: {err}")
-        try:
-            with open(f_store, 'r', encoding='utf-8') as file:
-                json_obj = json.load(file)
 
+        try:
+            with open(self.__file_path, 'r', encoding='utf-8') as _f:
+                json_obj = json.load(_f)
+
+            # converting from dictionary objects to class objects.
+            # this is done by selecting the class type
+            # from all_classes dictionary
             for obj_id, obj_dict in json_obj.items():
                 class_type = obj_dict["__class__"]
-                FileStorage.__objects[obj_id] = all_classes[
-                    class_type](**obj_dict)
-        except json.JSONDecodeError as err:
-            print(f"Error occurred while decoding JSON: {err}")
-        except KeyError as err:
-            print(f"Key error occurred: {err}")
+                self.__objects[obj_id] = all_classes[class_type](**obj_dict)
         except Exception as err:
-            print(f"An error occurred: {err}")
+            print(f"Error occurred while opening file: {err}")
