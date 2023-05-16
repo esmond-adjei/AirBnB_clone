@@ -119,7 +119,7 @@ class HBNBCommand(cmd.Cmd):
             return False
         if len(args) < 3:
             print("** attribute name missing **")
-            return False
+            return
         if len(args) < 4:
             print("** value missing **")
             return False
