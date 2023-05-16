@@ -2,9 +2,9 @@
 """console program for AirBnB clone program"""
 
 import cmd
-from models.storage import storage
+import models
 
-all_models = storage.classes()
+all_models = models.storage.classes()
 
 
 class HBNBCommand(cmd.Cmd):
