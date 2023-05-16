@@ -108,21 +108,21 @@ class HBNBCommand(cmd.Cmd):
         """Update an instance based on the class name and id"""
         args = self.__valid_command(line)
         if not args:
-            return
+            return False
         if len(args) < 2:
             print("** instance id missing **")
-            return
+            return False
         obj_id = args[0] + "." + args[1]
         obj = models.storage.all().get(obj_id, None)
         if not obj:
             print("** no instance found **")
-            return
+            return False
         if len(args) < 3:
             print("** attribute name missing **")
-            return
+            return False
         if len(args) < 4:
             print("** value missing **")
-            return
+            return False
         setattr(obj, args[2], args[3])
         models.storage.save()
 
