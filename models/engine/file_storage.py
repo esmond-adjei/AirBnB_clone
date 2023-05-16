@@ -46,13 +46,7 @@ class FileStorage:
 
     def delete(self, obj):
         """Deletes obj from __objects if it exists"""
-        if obj:
-            key = f"{type(obj).__name__}.{obj.id}"
-            del FileStorage.__objects[key]
-
-    def destroy(self, obj):
-        """Deletes obj from __objects and saves the changes"""
-        self.delete(obj)
+        del FileStorage.__objects[obj]
         self.save()
 
     def classes(self):
