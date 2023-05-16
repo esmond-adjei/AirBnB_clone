@@ -27,7 +27,7 @@ class FileStorage:
         key = "{}.{}".format(type(obj).__name__, obj.id)
         FileStorage.__objects[key] = obj
 
-    def save(self, models):
+    def save(self):
         """ serializes __objects to the JSON file (path: __file_path)"""
         with open(FileStorage.__file_path, "w", encoding="utf-8") as f:
             d = {k: v.to_dict() for k, v in FileStorage.__objects.items()}
@@ -55,6 +55,7 @@ class FileStorage:
             obj_dict = json.load(f)
             obj_dict = {k: self.classes()[v["__class__"]](**v)
                         for k, v in obj_dict.items()}
+            # TODO: should this overwrite or insert?
             FileStorage.__objects = obj_dict
 
     def attributes(self):
