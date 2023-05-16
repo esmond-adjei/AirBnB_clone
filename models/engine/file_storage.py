@@ -27,11 +27,18 @@ class FileStorage:
         key = "{}.{}".format(type(obj).__name__, obj.id)
         FileStorage.__objects[key] = obj
 
-    def save(self):
+    def save(self, models):
         """ serializes __objects to the JSON file (path: __file_path)"""
-        with open(FileStorage.__file_path, "w", encoding="utf-8") as f:
-            d = {k: v.to_dict() for k, v in FileStorage.__objects.items()}
-            json.dump(d, f)
+        json_objs = {}
+        # Convert object to dictionary before saving to file
+        for obj_id, obj in self.__objects.items():
+            json_objs[obj_id] = obj.to_dict()
+        try:
+            with open(FileStorage.__file_path, 'w', encoding='utf-8') as file:
+                json.dump(json_objs, file)
+        except FileNotFoundError as err:
+            print(f"Error occurred while opening file: {err}")
+        models.storage.save()
 
     def classes(self):
         """Returns a dictionary of valid classes and their references"""
