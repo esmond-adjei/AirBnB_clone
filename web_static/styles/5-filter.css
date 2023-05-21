@@ -8,6 +8,8 @@
     /* personal adjustments */
     margin-top: 30px;
     position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .filters button {
@@ -25,4 +27,29 @@
 }
 .filters button:hover {
     opacity: 90%;
+}
+
+.locations, .amenities {
+    height: 100%;
+    width: 25%;
+    
+    /* personal styles */
+    padding-left: 30px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.locations {
+    border-right: 1px solid #DDDDDD;
+}
+
+section h3 {
+    font-weight: 600;
+    margin: 0;
+}
+section h4 {
+    font-weight: 400;
+    font-size: 14px;
+    margin: 5px 0 0 0;
 }
